@@ -3,4 +3,13 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="tabIndicatorColor">#FF15B8A8</color>
+    <color name="tabtextcolor">#FFC7CBCB</color>
+    <color name="tabSelectedTextColor">#FF454747</color>
+    <color name="tabbackground">#f5f6f6</color>
+    <color name="appred">#ff5f64</color>
+    <color name="appyellow">#ff8355</color>
+    <color name="appwhilte">#f0f7fe</color>
+    <color name="appgray">#eeeeee</color>
+    <color name="appblack">#414345</color>
 </resources>

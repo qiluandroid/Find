@@ -1,9 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.example.yuanshuai.find.activity.MainActivity">
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="1"
+        tools:context="com.example.yuanshuai.find.activity.Main">
+        <android.support.v4.view.ViewPager
+            android:layout_width="match_parent"
+            android:id="@+id/viewpager"
+            android:layout_height="0dp"
+            android:layout_weight="1"></android.support.v4.view.ViewPager>
+        <android.support.design.widget.TabLayout
+            android:layout_width="match_parent"
+            android:id="@+id/mytab"
+            android:layout_height="55dp"
+            style="@style/myTab"
+            app:tabBackground="@color/tabbackground"
+            ></android.support.design.widget.TabLayout>
 
-</android.support.constraint.ConstraintLayout>
+    </LinearLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/add"
+        app:layout_anchor="@id/mytab"
+        app:layout_anchorGravity="top|center_horizontal"
+        />
+</android.support.design.widget.CoordinatorLayout>
