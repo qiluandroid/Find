@@ -21,7 +21,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:id="@+id/back"
-            android:background="@mipmap/mapy"
+            android:background="@mipmap/back_b"
             android:layout_gravity="center_vertical"/>
         <TextView
             android:layout_width="0dp"

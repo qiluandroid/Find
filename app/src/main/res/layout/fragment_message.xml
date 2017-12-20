@@ -61,7 +61,7 @@
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:background="#97a3af"
+                android:background="@mipmap/right"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="20dp"/>
         </LinearLayout>
@@ -104,7 +104,7 @@
                 <ImageView
                     android:layout_width="25dp"
                     android:layout_height="25dp"
-                    android:background="#97a3af"
+                    android:background="@mipmap/right"
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="20dp"/>
             </LinearLayout>
@@ -147,7 +147,7 @@
                 <ImageView
                     android:layout_width="25dp"
                     android:layout_height="25dp"
-                    android:background="#97a3af"
+                    android:background="@mipmap/right"
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="20dp"/>
             </LinearLayout>

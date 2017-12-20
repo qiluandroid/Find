@@ -42,7 +42,7 @@
             <ImageView
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:background="#a2cbf4"
+                android:background="@mipmap/collect"
                 android:layout_marginLeft="18dp"
                 android:layout_marginRight="18dp"
                 android:layout_gravity="center_vertical"/>
@@ -66,7 +66,7 @@
             <ImageView
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:background="#a2cbf4"
+                android:background="@mipmap/hassend"
                 android:layout_marginLeft="18dp"
                 android:layout_marginRight="18dp"
                 android:layout_gravity="center_vertical"/>
@@ -91,7 +91,7 @@
             <ImageView
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:background="#a2cbf4"
+                android:background="@mipmap/zhichu"
                 android:layout_marginLeft="18dp"
                 android:layout_marginRight="18dp"
                 android:layout_gravity="center_vertical"/>
@@ -115,7 +115,7 @@
             <ImageView
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:background="#a2cbf4"
+                android:background="@mipmap/shouru"
                 android:layout_marginLeft="18dp"
                 android:layout_marginRight="18dp"
                 android:layout_gravity="center_vertical"/>
@@ -139,7 +139,7 @@
             <ImageView
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:background="#a2cbf4"
+                android:background="@mipmap/zan"
                 android:layout_marginLeft="18dp"
                 android:layout_marginRight="18dp"
                 android:layout_gravity="center_vertical"/>
@@ -161,9 +161,9 @@
             android:id="@+id/help"
             android:orientation="horizontal">
             <ImageView
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:background="#a2cbf4"
+                android:layout_width="30dp"
+                android:layout_height="38dp"
+                android:background="@mipmap/help"
                 android:layout_marginLeft="18dp"
                 android:layout_marginRight="18dp"
                 android:layout_gravity="center_vertical"/>

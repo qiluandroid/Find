@@ -7,11 +7,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import com.example.yuanshuai.find.R;
 
+import java.util.concurrent.TimeUnit;
+
+import butterknife.BindView;
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
+
 public class Splash extends AppCompatActivity {
 
+    @BindView(R.id.content)
+    TextView textView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +42,34 @@ public class Splash extends AppCompatActivity {
                 }
             }
         }).start();
+//        Observable.interval(0, 1, TimeUnit.SECONDS)
+//                .map(new Func1<Long, Integer>() {
+//                    @Override
+//                    public Integer call(Long increaseTime) {
+//                        return 5 - increaseTime.intValue();
+//                    }
+//                })
+//                .take(5 + 1)
+//                .subscribeOn(Schedulers.io())
+//                .unsubscribeOn(Schedulers.io())
+//                .subscribeOn(AndroidSchedulers.mainThread())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Subscriber<Integer>() {
+//                    @Override
+//                    public void onCompleted() {
+//
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onNext(Integer integer) {
+//                        mBinding.sbSkip.setText("跳过 " + integer);
+//                    }
+//                });
     }
 
 

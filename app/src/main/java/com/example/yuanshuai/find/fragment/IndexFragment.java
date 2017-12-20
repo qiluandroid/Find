@@ -90,11 +90,17 @@ public class IndexFragment extends Fragment {
     private void init(){
         types=new ArrayList<HashMap<String, Object>>();
         HashMap<String,Object> hashMap=new HashMap<>();
-        hashMap.put("image",R.mipmap.dog);
-        hashMap.put("text","狗");
+        hashMap.put("image",R.mipmap.ren);
+        hashMap.put("text","人");
+        HashMap<String,Object> hashMap1=new HashMap<>();
+        hashMap1.put("image",R.mipmap.chongwu);
+        hashMap1.put("text","宠物");
+        HashMap<String,Object> hashMap2=new HashMap<>();
+        hashMap2.put("image",R.mipmap.wupin);
+        hashMap2.put("text","物品");
         types.add(hashMap);
-        types.add(hashMap);
-        types.add(hashMap);
+        types.add(hashMap1);
+        types.add(hashMap2);
         typeAdapter=new TypeAdapter(getContext(),types);
         typeAdapter.setOnItemClickListener(new TypeAdapter.OnItemClickListener() {
             @Override
@@ -106,15 +112,29 @@ public class IndexFragment extends Fragment {
         type.setAdapter(typeAdapter);
         finds=new ArrayList<HashMap<String, Object>>();
         HashMap<String,Object> map=new HashMap<>();
-        map.put("image",R.mipmap.dog);
-        map.put("text","丢了");
-        map.put("text2","好远");
-        map.put("text3","不给钱");
+        map.put("image",R.mipmap.touxiang);
+        map.put("text","测试");
+        map.put("text2","2.0 km");
+        map.put("text3","100￥");
+        HashMap<String,Object> map1=new HashMap<>();
+        map1.put("image",R.mipmap.touxiang);
+        map1.put("text","狗子丢了");
+        map1.put("text2","1.9 km");
+        map1.put("text3","99 ￥");
+        HashMap<String,Object> map2=new HashMap<>();
+        map2.put("image",R.mipmap.touxiang);
+        map2.put("text","狗子又丢了");
+        map2.put("text2","3.0 km");
+        map2.put("text3","99 ￥");
+        HashMap<String,Object> map3=new HashMap<>();
+        map3.put("image",R.mipmap.touxiang);
+        map3.put("text","狗子丢了");
+        map3.put("text2","4.0 km");
+        map3.put("text3","99 ￥");
+        finds.add(map1);
         finds.add(map);
-        finds.add(map);finds.add(map);
-        finds.add(map);
-        finds.add(map);
-        finds.add(map);
+        finds.add(map2);
+        finds.add(map3);
         findAadapter=new FindAadapter(getContext(),finds);
         findAadapter.setOnItemClickListener(new TypeAdapter.OnItemClickListener() {
             @Override
