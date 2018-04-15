@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:weightSum="1"
     tools:context="com.example.yuanshuai.find.fragment.MeFragment">
@@ -16,7 +17,6 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="50dp"
             android:id="@+id/headImage"
-
             android:src="@mipmap/cat"/>
         <TextView
             android:layout_width="wrap_content"
@@ -27,160 +27,182 @@
             android:textSize="23sp"
             android:id="@+id/name"/>
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="vertical"
         android:weightSum="6.5">
+
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
             android:id="@+id/collection"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:orientation="horizontal">
+
             <ImageView
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:background="@mipmap/collect"
+                android:layout_gravity="center_vertical"
                 android:layout_marginLeft="18dp"
                 android:layout_marginRight="18dp"
-                android:layout_gravity="center_vertical"/>
+                android:background="@mipmap/collect" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:textSize="20sp"
-                android:text="我的收藏"/>
+                android:text="我的收藏"
+                android:textSize="20sp" />
         </LinearLayout>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/appgray"/>
+            android:background="@color/appgray" />
+
         <LinearLayout
+            android:id="@+id/hasfabu"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:orientation="horizontal"
-            android:id="@+id/hasfabu">
+            android:orientation="horizontal">
+
             <ImageView
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:background="@mipmap/hassend"
+                android:layout_gravity="center_vertical"
                 android:layout_marginLeft="18dp"
                 android:layout_marginRight="18dp"
-                android:layout_gravity="center_vertical"/>
+                android:background="@mipmap/hassend" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:textSize="20sp"
-                android:text="我发布的"/>
+                android:text="我发布的"
+                android:textSize="20sp" />
         </LinearLayout>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/appgray"/>
+            android:background="@color/appgray" />
+
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
             android:id="@+id/pay"
-            android:orientation="horizontal"
-            >
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
             <ImageView
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:background="@mipmap/zhichu"
+                android:layout_gravity="center_vertical"
                 android:layout_marginLeft="18dp"
                 android:layout_marginRight="18dp"
-                android:layout_gravity="center_vertical"/>
+                android:background="@mipmap/zhichu" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:textSize="20sp"
-                android:text="支出"/>
+                android:text="支出"
+                android:textSize="20sp" />
         </LinearLayout>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/appgray"/>
+            android:background="@color/appgray" />
+
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
             android:id="@+id/shouru"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-            <ImageView
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:background="@mipmap/shouru"
-                android:layout_marginLeft="18dp"
-                android:layout_marginRight="18dp"
-                android:layout_gravity="center_vertical"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:textSize="20sp"
-                android:text="收入"/>
-        </LinearLayout>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/appgray"/>
-        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:id="@+id/zan"
             android:orientation="horizontal">
+
             <ImageView
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:background="@mipmap/zan"
+                android:layout_gravity="center_vertical"
                 android:layout_marginLeft="18dp"
                 android:layout_marginRight="18dp"
-                android:layout_gravity="center_vertical"/>
+                android:background="@mipmap/shouru" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:textSize="20sp"
-                android:text="被赞过的"/>
+                android:text="收入"
+                android:textSize="20sp" />
         </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/appgray" />
+
+        <LinearLayout
+            android:id="@+id/zan"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="18dp"
+                android:layout_marginRight="18dp"
+                android:background="@mipmap/zan" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="被赞过的"
+                android:textSize="20sp" />
+        </LinearLayout>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="5dp"
-            android:background="@color/appgray"/>
+            android:background="@color/appgray" />
+
         <LinearLayout
+            android:id="@+id/help"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1.5"
-            android:id="@+id/help"
             android:orientation="horizontal">
+
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="38dp"
-                android:background="@mipmap/help"
+                android:layout_gravity="center_vertical"
                 android:layout_marginLeft="18dp"
                 android:layout_marginRight="18dp"
-                android:layout_gravity="center_vertical"/>
+                android:background="@mipmap/help" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:textSize="20sp"
-                android:text="帮助与反馈"/>
+                android:text="帮助与反馈"
+                android:textSize="20sp" />
         </LinearLayout>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/appgray"/>
+            android:background="@color/appgray" />
     </LinearLayout>
-
-
 
 
 </LinearLayout>

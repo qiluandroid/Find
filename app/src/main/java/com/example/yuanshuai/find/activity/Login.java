@@ -13,13 +13,22 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.yuanshuai.find.R;
+import com.example.yuanshuai.find.model.Output;
+import com.example.yuanshuai.find.model.User;
+import com.example.yuanshuai.find.model.UserInfoOutput;
+import com.example.yuanshuai.find.net.Net;
 import com.jakewharton.rxbinding.view.RxView;
 
 import org.w3c.dom.Text;
 
+import java.io.IOException;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.ResponseBody;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 public class Login extends AppCompatActivity {
     @BindView(R.id.user)
@@ -76,10 +85,55 @@ public class Login extends AppCompatActivity {
             login(username,password);
         }
     }
-    private void login(String username,String password){
-        Intent intent=new Intent(Login.this,Splash.class);
-        startActivity(intent);
-        finish();
+    private void login(final String username, String password){
+        Net.getNet().login(username,password)
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.immediate())
+                .subscribe(new Action1<Output<UserInfoOutput>>() {
+                               @Override
+                               public void call(Output output) {
+                                   if(output.getCode()==100)
+                                       showSnackBar("登录失败");
+                                   else if(output.getCode()==201)
+                                       showSnackBar("参数错误");
+                                   else
+                                   {
+
+
+                                       UserInfoOutput userInfoOutput=(UserInfoOutput)output.getData();
+                                       Log.e("login",userInfoOutput.toString());
+                                       Net.getNet().setUserInfoOutput(userInfoOutput);
+                                       Intent intent=new Intent(Login.this,Splash.class);
+                                       startActivity(intent);
+                                       finish();
+                                   }
+                               }
+                           },
+                        new Action1<Throwable>() {
+                            @Override
+                            public void call(Throwable throwable) {
+                                showSnackBar(throwable.getMessage());
+                            }
+                        });
+//        Net.getNet().login1(username,password)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(Schedulers.immediate())
+//                .subscribe(new Action1<ResponseBody>() {
+//                               @Override
+//                               public void call(ResponseBody output) {
+//                                   try {
+//                                       Log.e("login",""+output.string());
+//                                   } catch (IOException e) {
+//                                       e.printStackTrace();
+//                                   }
+//                               }
+//                           },
+//                        new Action1<Throwable>() {
+//                            @Override
+//                            public void call(Throwable throwable) {
+//                                showSnackBar(throwable.getMessage());
+//                            }
+//                        });
 
     }
     public void showSnackBar(String message){

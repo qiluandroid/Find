@@ -84,6 +84,7 @@
             android:text="山东大学齐鲁软件学院"
             android:layout_gravity="center_vertical"
             android:textSize="18sp"
+            android:id="@+id/address"
             android:layout_marginLeft="20dp"/>
     </LinearLayout>
     <TextView
@@ -144,6 +145,7 @@
         android:textSize="20sp"
         android:textColor="@color/appwhilte"
         android:background="@drawable/reg_back2"
-        android:layout_margin="20dp"/>
+        android:layout_margin="20dp"
+        android:id="@+id/send"/>
 </LinearLayout>
 </ScrollView>

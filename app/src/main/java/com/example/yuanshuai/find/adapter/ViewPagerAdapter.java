@@ -1,9 +1,13 @@
 package com.example.yuanshuai.find.adapter;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.example.yuanshuai.find.R;
 import com.example.yuanshuai.find.fragment.ExchangeFragment;
 import com.example.yuanshuai.find.fragment.IndexFragment;
 import com.example.yuanshuai.find.fragment.MeFragment;
@@ -15,6 +19,10 @@ import com.example.yuanshuai.find.fragment.MessageFragment;
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
     private final int Counts=4;
+    private IndexFragment indexFragment=new IndexFragment();
+    private ExchangeFragment exchangeFragment=new ExchangeFragment();
+    private MessageFragment messageFragment=new MessageFragment();
+    private MeFragment meFragment=new MeFragment();
     public ViewPagerAdapter(FragmentManager fm) {
         super(fm);
     }
@@ -24,28 +32,26 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         Fragment fragment=null;
         switch (position){
             case 0:
-                fragment=new IndexFragment();
-                break;
+                return  indexFragment;
             case 1:
-                fragment=new ExchangeFragment();
-                break;
+                return exchangeFragment;
             case 2:
-                fragment=new MessageFragment();
-                break;
+                return messageFragment;
             case 3:
-                fragment=new MeFragment();
-                break;
+                return meFragment;
             default:
                 fragment=new Fragment();
-                break;
+                return fragment;
 
         }
 
-        return fragment;
     }
 
     @Override
     public int getCount() {
         return Counts;
+    }
+    public void flush(){
+        meFragment.flush();
     }
 }

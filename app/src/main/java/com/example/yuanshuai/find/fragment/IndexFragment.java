@@ -2,11 +2,13 @@ package com.example.yuanshuai.find.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +18,19 @@ import com.example.yuanshuai.find.R;
 import com.example.yuanshuai.find.activity.Detail;
 import com.example.yuanshuai.find.adapter.FindAadapter;
 import com.example.yuanshuai.find.adapter.TypeAdapter;
+import com.example.yuanshuai.find.model.Mission;
+import com.example.yuanshuai.find.model.Output;
+import com.example.yuanshuai.find.net.Net;
+import com.example.yuanshuai.find.tool.LocationUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import butterknife.ButterKnife;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 public class IndexFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
@@ -111,6 +120,21 @@ public class IndexFragment extends Fragment {
         type.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
         type.setAdapter(typeAdapter);
         finds=new ArrayList<HashMap<String, Object>>();
+        Location location=LocationUtils.getInstance(getActivity()).showLocation();
+        Net.getNet().nearbyList(0,location.getLatitude(),location.getLongitude(),5)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Output>() {
+                    @Override
+                    public void call(Output output) {
+                        Log.e("db",""+output);
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+
+                    }
+                });
         HashMap<String,Object> map=new HashMap<>();
         map.put("image",R.mipmap.touxiang);
         map.put("text","测试");
@@ -152,6 +176,25 @@ public class IndexFragment extends Fragment {
 
 
 
+    }
+    //    刷新列表
+    public void flush(){
+        Location location=LocationUtils.getInstance(getActivity()).showLocation();
+        Net.getNet().nearbyList(0,location.getLatitude(),location.getLongitude(),10)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Output<List<Mission>>>() {
+                    @Override
+                    public void call(Output<List<Mission>> listOutput) {
+                        Log.e("f",""+listOutput.getData().size());
+//                        放到recycleview上
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+
+                    }
+                });
     }
 
 

@@ -1,25 +1,58 @@
 package com.example.yuanshuai.find.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.yuanshuai.find.R;
 import com.example.yuanshuai.find.adapter.ViewPagerAdapter;
+import com.example.yuanshuai.find.model.Mission;
+import com.example.yuanshuai.find.model.Output;
+import com.example.yuanshuai.find.net.Net;
+import com.example.yuanshuai.find.tool.LocationUtils;
 
 import org.w3c.dom.Text;
+
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.ResponseBody;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
+
+import static android.graphics.BitmapFactory.decodeStream;
+import static java.security.AccessController.getContext;
 
 public class Main extends AppCompatActivity {
     //view
@@ -40,6 +73,7 @@ public class Main extends AppCompatActivity {
     private int[] tabtitle=new int[]{R.string.tabtitle1,R.string.tabtitle2,R.string.tabtitle3,R.string.tabtitle4};
     private int[] tabimage=new int[]{R.drawable.index,R.drawable.exchange,R.drawable.message,R.drawable.me};
     private int last=0;
+    final private int REQUEST_CODE_LOCAL=1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +82,7 @@ public class Main extends AppCompatActivity {
 
         ButterKnife.bind(this);
         init();
+        initViews();
     }
     private void init(){
         viewPagerAdapter=new ViewPagerAdapter(getSupportFragmentManager());
@@ -118,6 +153,8 @@ public class Main extends AppCompatActivity {
 
             }
         });
+
+//        获取地理位置
     }
     private void setTabs(){
         for(int i=0;i<COUNTS;i++){
@@ -143,7 +180,186 @@ public class Main extends AppCompatActivity {
         tab.getCustomView().setBackground(null);
         tabLayout.addTab(tabLayout.newTab().setCustomView(view),2,false);
 
+        getLocate();
+
+    }
+    private void initViews(){
+        Net.getNet().getUserAvatar()
+                .subscribeOn(Schedulers.io())
+                .map(new Func1<ResponseBody, Bitmap>() {
+                    @Override
+                    public Bitmap call(ResponseBody responseBody) {
+                        Bitmap bitmap=null;
+                        try {
+                            Net.getNet().setBs(responseBody.bytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        bitmap= BitmapFactory.decodeStream(responseBody.byteStream());
+                        return bitmap;
+
+                    }
+                })
+                .observeOn(Schedulers.immediate())
+                .subscribe(new Action1<Bitmap>() {
+                    @Override
+                    public void call(Bitmap bitmap) {
+                        Drawable draw=new BitmapDrawable(bitmap);
+                        Net.getNet().setHeadImage(draw);
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        showSnackBar(throwable.getMessage());
+                        Log.e("error",throwable.getMessage());
+                    }
+                });
+        flush();
+
+    }
+//    刷新列表
+    public void flush(){
+        Location location=getLocate();
+        Net.getNet().nearbyList(0,location.getLatitude(),location.getLongitude(),10)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Output<List<Mission>>>() {
+                    @Override
+                    public void call(Output<List<Mission>> listOutput) {
+                        Log.e("f",""+listOutput.getData().size());
+//                        放到recycleview上
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        showSnackBar(throwable.getMessage());
+                    }
+                });
+    }
+    public void showSnackBar(String message){
+        final Snackbar snackbar=Snackbar.make(getWindow().getDecorView(),message,Snackbar.LENGTH_INDEFINITE);
+        snackbar.setAction("知道了",new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                snackbar.dismiss();
+            }
+        });
+        snackbar.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode,resultCode,data);
+        switch (requestCode){
+            case REQUEST_CODE_LOCAL:
+                final Uri uri = ( data != null ? data.getData() : null );
+                String path=getPath(uri);
+                Log.e("a",path);
+//                Net.getNet().setUserAvatar(path)
+//                        .subscribeOn(Schedulers.io())
+//                        .observeOn(Schedulers.immediate())
+//                        .subscribe(new Action1<Output>() {
+//                            @Override
+//                            public void call(Output output) {
+//                                Log.e("a",""+output.toString());
+//                            }
+//                        }, new Action1<Throwable>() {
+//                            @Override
+//                            public void call(Throwable throwable) {
+//                                showSnackBar(throwable.getMessage());
+//                            }
+//                        });
+//                设置头像
+                Net.getNet().c(path)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Action1<ResponseBody>() {
+                            @Override
+                            public void call(ResponseBody output) {
+                                Log.e("a", "" + output.toString());
+//                                重新设置一次
+                                Net.getNet().getUserAvatar()
+                                        .subscribeOn(Schedulers.io())
+                                        .map(new Func1<ResponseBody, Bitmap>() {
+                                            @Override
+                                            public Bitmap call(ResponseBody responseBody) {
+                                                Bitmap bitmap=null;
+                                                try {
+                                                    Net.getNet().setBs(responseBody.bytes());
+                                                } catch (IOException e) {
+                                                    e.printStackTrace();
+                                                }
+                                                bitmap= BitmapFactory.decodeStream(responseBody.byteStream());
 
 
+
+                                                return bitmap;
+
+                                            }
+                                        })
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribe(new Action1<Bitmap>() {
+                                            @Override
+                                            public void call(Bitmap bitmap) {
+                                                Drawable draw=new BitmapDrawable(bitmap);
+                                                Net.getNet().setHeadImage(draw);
+                                                viewPagerAdapter.flush();
+                                            }
+                                        }, new Action1<Throwable>() {
+                                            @Override
+                                            public void call(Throwable throwable) {
+                                                showSnackBar(throwable.getMessage());
+                                                Log.e("error",throwable.getMessage());
+                                            }
+                                        });
+                            }
+
+                        }, new Action1<Throwable>() {
+                            @Override
+                            public void call(Throwable throwable) {
+                                showSnackBar(throwable.getMessage());
+                            }
+                        });
+                break;
+            default:
+                break;
+        }
+
+    }
+    protected String  getPath(Uri selectedImage) {
+        String[] filePathColumn = { MediaStore.Images.Media.DATA };
+        Cursor cursor = this.getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(columnIndex);
+            cursor.close();
+            cursor = null;
+
+            if (picturePath == null || picturePath.equals("null")) {
+
+                return null;
+            }
+            return picturePath;
+        } else {
+            File file = new File(selectedImage.getPath());
+            if (!file.exists()) {
+
+                return null;
+
+            }
+            return  file.getAbsolutePath();
+        }
+
+    }
+//    获取地理位置
+    private Location getLocate(){
+        return LocationUtils.getInstance(Main.this).showLocation();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LocationUtils.getInstance(this).removeLocationUpdatesListener();
     }
 }
