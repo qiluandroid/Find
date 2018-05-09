@@ -10,6 +10,7 @@ import android.widget.DatePicker;
 
 import com.example.yuanshuai.find.R;
 import com.example.yuanshuai.find.adapter.FindAadapter;
+import com.example.yuanshuai.find.model.Mission;
 
 import org.json.JSONArray;
 
@@ -75,6 +76,7 @@ public class Collection extends AppCompatActivity {
         list.add(map);
         list.add(map);
         list.add(map);
+        List<Mission> list=new ArrayList<>();
         findAadapter=new FindAadapter(this,list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
         recyclerView.setAdapter(findAadapter);

@@ -34,9 +34,8 @@
         android:layout_weight="1"
         android:orientation="vertical"
         android:weightSum="6.5">
-
         <LinearLayout
-            android:id="@+id/collection"
+            android:id="@+id/resetPassword"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -48,15 +47,43 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="18dp"
                 android:layout_marginRight="18dp"
-                android:background="@mipmap/collect" />
+                android:background="@mipmap/reset" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:text="我的收藏"
+                android:text="修改密码"
                 android:textSize="20sp" />
         </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/appgray" />
+
+        <!--<LinearLayout-->
+            <!--android:id="@+id/collection"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="0dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:orientation="horizontal">-->
+
+            <!--<ImageView-->
+                <!--android:layout_width="35dp"-->
+                <!--android:layout_height="35dp"-->
+                <!--android:layout_gravity="center_vertical"-->
+                <!--android:layout_marginLeft="18dp"-->
+                <!--android:layout_marginRight="18dp"-->
+                <!--android:background="@mipmap/collect" />-->
+
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center_vertical"-->
+                <!--android:text="我的收藏"-->
+                <!--android:textSize="20sp" />-->
+        <!--</LinearLayout>-->
 
         <TextView
             android:layout_width="match_parent"
@@ -147,28 +174,28 @@
             android:layout_height="1dp"
             android:background="@color/appgray" />
 
-        <LinearLayout
-            android:id="@+id/zan"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal">
+        <!--<LinearLayout-->
+            <!--android:id="@+id/zan"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="0dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:orientation="horizontal">-->
 
-            <ImageView
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="18dp"
-                android:layout_marginRight="18dp"
-                android:background="@mipmap/zan" />
+            <!--<ImageView-->
+                <!--android:layout_width="35dp"-->
+                <!--android:layout_height="35dp"-->
+                <!--android:layout_gravity="center_vertical"-->
+                <!--android:layout_marginLeft="18dp"-->
+                <!--android:layout_marginRight="18dp"-->
+                <!--android:background="@mipmap/zan" />-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="被赞过的"
-                android:textSize="20sp" />
-        </LinearLayout>
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center_vertical"-->
+                <!--android:text="被赞过的"-->
+                <!--android:textSize="20sp" />-->
+        <!--</LinearLayout>-->
 
         <TextView
             android:layout_width="match_parent"

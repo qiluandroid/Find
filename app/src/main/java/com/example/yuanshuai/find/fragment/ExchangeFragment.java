@@ -4,11 +4,29 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.yuanshuai.find.R;
+import com.example.yuanshuai.find.model.Output;
+import com.example.yuanshuai.find.net.Net;
+import com.pingplusplus.ui.CHANNELS;
+import com.pingplusplus.ui.ChannelListener;
+import com.pingplusplus.ui.PingppUI;
+
+import java.io.IOException;
+
+import butterknife.ButterKnife;
+import okhttp3.ResponseBody;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,6 +44,17 @@ public class ExchangeFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private boolean[] bs=new boolean[]{false,false,false,false};
+    LinearLayout m1;
+    LinearLayout m2;
+    LinearLayout m3;
+    LinearLayout m4;
+    int money=0;
+    TextView money1;
+    TextView money2;
+    Button yes;
+    Button no;
+
 //
 //    private OnFragmentInteractionListener mListener;
 
@@ -64,7 +93,18 @@ public class ExchangeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_exchange, container, false);
+        View view=inflater.inflate(R.layout.fragment_exchange, container, false);
+        money1= ButterKnife.findById(view,R.id.money);
+        money2=ButterKnife.findById(view,R.id.monety2);
+        yes=ButterKnife.findById(view,R.id.yes);
+        no=ButterKnife.findById(view,R.id.cancel);
+        m1=ButterKnife.findById(view,R.id.m1);
+        m2=ButterKnife.findById(view,R.id.m2);
+        m3=ButterKnife.findById(view,R.id.m3);
+        m4=ButterKnife.findById(view,R.id.m4);
+        init();
+        flush();
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -105,4 +145,132 @@ public class ExchangeFragment extends Fragment {
 //        // TODO: Update argument type and name
 //        void onFragmentInteraction(Uri uri);
 //    }
+//    刷新数据
+    public void flush(){
+        money1.setText(""+Net.getNet().getUserInfoOutput().getBalance());
+        money2.setText(""+Net.getNet().getUserInfoOutput().getBalance());
+        yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pay();
+            }
+        });
+    }
+    public void showMsg(String title, String msg1, String msg2) {
+        String str = title;
+        if (null !=msg1 && msg1.length() != 0) {
+            str += "\n" + msg1;
+        }
+        if (null !=msg2 && msg2.length() != 0) {
+            str += "\n" + msg2;
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage(str);
+        builder.setTitle("提示");
+        builder.setPositiveButton("OK", null);
+        builder.create().show();
+    }
+    public void pay(){
+        for(int i=0;i<4;i++){
+            if(bs[i]==true)
+            {
+                if(i==0)
+                    money=5;
+                else if(i==1)
+                    money=10;
+                else if(i==2)
+                    money=20;
+                else
+                    money=40;
+            }
+        }
+        CHANNELS[] channels = new CHANNELS[]{CHANNELS.ALIPAY, CHANNELS.WX, CHANNELS.UPACP,
+                CHANNELS.BFB_WAP, CHANNELS.JDPAY_WAP, CHANNELS.QPAY,
+                CHANNELS.CMB_WALLET, CHANNELS.YEEPAY_WAP};
+        PingppUI.enableChannels(channels);
+
+        // 参数一: context 上下文对象
+        // 参数二: ChannelListener 选择渠道回调类
+        PingppUI.showPaymentChannels(getActivity(), new ChannelListener() {
+            @Override public void selectChannel(String channel) {
+                // channel 为用户选择的支付渠道
+                Net.getNet().charge(money,channel)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Action1<ResponseBody>() {
+                            @Override
+                            public void call(ResponseBody output) {
+                                try {
+                                    m1.setBackgroundResource(R.drawable.back3);
+                                    m2.setBackgroundResource(R.drawable.back3);
+                                    m3.setBackgroundResource(R.drawable.back3);
+                                    m4.setBackgroundResource(R.drawable.back3);
+                                    Log.e("charge", "" + output.string().toString());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }, new Action1<Throwable>() {
+                            @Override
+                            public void call(Throwable throwable) {
+                                Log.e("charge",""+throwable.getMessage());
+                            }
+                        });
+            }
+        });
+    }
+    public void init(){
+        m1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bs[0]=true;
+                bs[1]=false;
+                bs[2]=false;
+                bs[3]=false;
+                m1.setBackgroundResource(R.drawable.back_select);
+                m2.setBackgroundResource(R.drawable.back3);
+                m3.setBackgroundResource(R.drawable.back3);
+                m4.setBackgroundResource(R.drawable.back3);
+            }
+        });
+        m2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bs[1]=true;
+                bs[0]=false;
+                bs[2]=false;
+                bs[3]=false;
+                m2.setBackgroundResource(R.drawable.back_select);
+                m1.setBackgroundResource(R.drawable.back3);
+                m3.setBackgroundResource(R.drawable.back3);
+                m4.setBackgroundResource(R.drawable.back3);
+            }
+        });
+        m3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bs[2]=true;
+                bs[0]=false;
+                bs[1]=false;
+                bs[3]=false;
+                m3.setBackgroundResource(R.drawable.back_select);
+                m1.setBackgroundResource(R.drawable.back3);
+                m2.setBackgroundResource(R.drawable.back3);
+                m4.setBackgroundResource(R.drawable.back3);
+            }
+        });
+        m4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bs[3]=true;
+                bs[0]=false;
+                bs[1]=false;
+                bs[2]=false;
+                m4.setBackgroundResource(R.drawable.back_select);
+                m1.setBackgroundResource(R.drawable.back3);
+                m2.setBackgroundResource(R.drawable.back3);
+                m3.setBackgroundResource(R.drawable.back3);
+            }
+        });
+    }
 }

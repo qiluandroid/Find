@@ -9,8 +9,9 @@ import java.util.List;
 
 public class Mission {
     private String id;
-
-    private User user;
+    private String time;
+    private double x;
+    private double y;
 
     public String getId() {
         return id;
@@ -20,19 +21,11 @@ public class Mission {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Timestamp getTime() {
+    public String getTime() {
         return time;
     }
 
-    public void setTime(Timestamp time) {
+    public void setTime(String time) {
         this.time = time;
     }
 
@@ -84,6 +77,14 @@ public class Mission {
         this.price = price;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public boolean isFinish() {
         return finish;
     }
@@ -92,12 +93,12 @@ public class Mission {
         this.finish = finish;
     }
 
-    public List<MissionImage> getImages() {
-        return images;
+    public UserInfoOutput getUser() {
+        return user;
     }
 
-    public void setImages(List<MissionImage> images) {
-        this.images = images;
+    public void setUser(UserInfoOutput user) {
+        this.user = user;
     }
 
     public List<MissionComment> getComments() {
@@ -108,22 +109,23 @@ public class Mission {
         this.comments = comments;
     }
 
-    private Timestamp time;
+    public List<String> getImages() {
+        return images;
+    }
 
-    private double x;
-    private double y;
+    public void setImages(List<String> images) {
+        this.images = images;
+    }
 
     private String address;
-
-
     private String title;
     private String description;
-
     private int price;
-    private boolean finish = false;
+    private String type;
+    private boolean finish;
 
-    private List<MissionImage> images;
-
+    private UserInfoOutput user;
     private List<MissionComment> comments;
+    private List<String> images;
 }
 

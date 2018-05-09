@@ -43,11 +43,11 @@ public class Message {
         this.message = message;
     }
 
-    public Timestamp getTime() {
+    public String getTime() {
         return time;
     }
 
-    public void setTime(Timestamp time) {
+    public void setTime(String time) {
         this.time = time;
     }
 
@@ -61,6 +61,6 @@ public class Message {
 
     private UserInfoOutput toUser;
     private String message;
-    private Timestamp time;
+    private String  time="1525355544690";
     private List<MessageReply> replies;
 }

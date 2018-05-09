@@ -8,6 +8,7 @@ import android.view.WindowManager;
 
 import com.example.yuanshuai.find.R;
 import com.example.yuanshuai.find.adapter.FindAadapter;
+import com.example.yuanshuai.find.model.Mission;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,6 +47,7 @@ public class MyZan extends AppCompatActivity {
         list.add(map);
         list.add(map);
         list.add(map);
+        List<Mission> list=new ArrayList<>();
         findAadapter=new FindAadapter(this,list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
         recyclerView.setAdapter(findAadapter);

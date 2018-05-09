@@ -10,17 +10,49 @@ import java.util.List;
 public class MissionComment {
     private String id;
 
-    private User user;
+    public String getId() {
+        return id;
+    }
 
+    public void setId(String id) {
+        this.id = id;
+    }
 
-    private Mission mission;
+    public String getComment() {
+        return comment;
+    }
 
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
 
-    private Timestamp time;
+    public String getTime() {
+        return time;
+    }
 
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public UserInfoOutput getUser() {
+        return user;
+    }
+
+    public void setUser(UserInfoOutput user) {
+        this.user = user;
+    }
+
+    public List<MissionCommentReply> getReplies() {
+        return replies;
+    }
+
+    public void setReplies(List<MissionCommentReply> replies) {
+        this.replies = replies;
+    }
 
     private String comment;
+    private String time;
+    private UserInfoOutput user;
 
-
-    private List<MissionCommentReply> replies;
+    List<MissionCommentReply> replies;
 }

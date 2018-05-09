@@ -33,16 +33,16 @@ public class MessageReply {
         this.userId = userId;
     }
 
-    public Timestamp getTime() {
+    public String getTime() {
         return time;
     }
 
-    public void setTime(Timestamp time) {
+    public void setTime(String time) {
         this.time = time;
     }
 
     private String reply;
     private String userId;
-    private Timestamp time;
+    private String time;
 
 }

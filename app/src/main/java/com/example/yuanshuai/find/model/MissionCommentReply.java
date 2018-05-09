@@ -9,13 +9,41 @@ import java.sql.Timestamp;
 public class MissionCommentReply {
 
     private String id;
-
-    private User user;
-
-    private MissionComment comment;
-
-
-    private Timestamp time;
-
     private String reply;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getReply() {
+        return reply;
+    }
+
+    public void setReply(String reply) {
+        this.reply = reply;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public UserInfoOutput getUser() {
+        return user;
+    }
+
+    public void setUser(UserInfoOutput user) {
+        this.user = user;
+    }
+
+    private String time;
+
+    private UserInfoOutput user;
 }

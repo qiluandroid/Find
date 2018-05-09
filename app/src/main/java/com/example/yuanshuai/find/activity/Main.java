@@ -155,6 +155,7 @@ public class Main extends AppCompatActivity {
         });
 
 //        获取地理位置
+
     }
     private void setTabs(){
         for(int i=0;i<COUNTS;i++){
@@ -184,6 +185,7 @@ public class Main extends AppCompatActivity {
 
     }
     private void initViews(){
+        Log.e("head","0");
         Net.getNet().getUserAvatar()
                 .subscribeOn(Schedulers.io())
                 .map(new Func1<ResponseBody, Bitmap>() {
@@ -191,7 +193,9 @@ public class Main extends AppCompatActivity {
                     public Bitmap call(ResponseBody responseBody) {
                         Bitmap bitmap=null;
                         try {
+                            Log.e("head","1");
                             Net.getNet().setBs(responseBody.bytes());
+                            Log.e("head","2");
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -220,6 +224,8 @@ public class Main extends AppCompatActivity {
 //    刷新列表
     public void flush(){
         Location location=getLocate();
+        double a=location.getLatitude();
+        double b=location.getLongitude();
         Net.getNet().nearbyList(0,location.getLatitude(),location.getLongitude(),10)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -249,81 +255,70 @@ public class Main extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode,resultCode,data);
         switch (requestCode){
             case REQUEST_CODE_LOCAL:
-                final Uri uri = ( data != null ? data.getData() : null );
-                String path=getPath(uri);
-                Log.e("a",path);
-//                Net.getNet().setUserAvatar(path)
-//                        .subscribeOn(Schedulers.io())
-//                        .observeOn(Schedulers.immediate())
-//                        .subscribe(new Action1<Output>() {
-//                            @Override
-//                            public void call(Output output) {
-//                                Log.e("a",""+output.toString());
-//                            }
-//                        }, new Action1<Throwable>() {
-//                            @Override
-//                            public void call(Throwable throwable) {
-//                                showSnackBar(throwable.getMessage());
-//                            }
-//                        });
+                if(data!=null){
+                    final Uri uri = data.getData();
+                    String path=getPath(uri);
+                    Log.e("a",path);
 //                设置头像
-                Net.getNet().c(path)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Action1<ResponseBody>() {
-                            @Override
-                            public void call(ResponseBody output) {
-                                Log.e("a", "" + output.toString());
+                    Net.getNet().c(path)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new Action1<ResponseBody>() {
+                                @Override
+                                public void call(ResponseBody output) {
+                                    Log.e("a", "" + output.toString());
 //                                重新设置一次
-                                Net.getNet().getUserAvatar()
-                                        .subscribeOn(Schedulers.io())
-                                        .map(new Func1<ResponseBody, Bitmap>() {
-                                            @Override
-                                            public Bitmap call(ResponseBody responseBody) {
-                                                Bitmap bitmap=null;
-                                                try {
-                                                    Net.getNet().setBs(responseBody.bytes());
-                                                } catch (IOException e) {
-                                                    e.printStackTrace();
+                                    Net.getNet().getUserAvatar()
+                                            .subscribeOn(Schedulers.io())
+                                            .map(new Func1<ResponseBody, Bitmap>() {
+                                                @Override
+                                                public Bitmap call(ResponseBody responseBody) {
+                                                    Bitmap bitmap=null;
+                                                    try {
+                                                        Net.getNet().setBs(responseBody.bytes());
+                                                    } catch (IOException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                    bitmap= BitmapFactory.decodeStream(responseBody.byteStream());
+
+
+
+                                                    return bitmap;
+
                                                 }
-                                                bitmap= BitmapFactory.decodeStream(responseBody.byteStream());
+                                            })
+                                            .observeOn(AndroidSchedulers.mainThread())
+                                            .subscribe(new Action1<Bitmap>() {
+                                                @Override
+                                                public void call(Bitmap bitmap) {
+                                                    Drawable draw=new BitmapDrawable(bitmap);
+                                                    Net.getNet().setHeadImage(draw);
+                                                    viewPagerAdapter.flush();
+                                                }
+                                            }, new Action1<Throwable>() {
+                                                @Override
+                                                public void call(Throwable throwable) {
+                                                    showSnackBar(throwable.getMessage());
+                                                    Log.e("error",throwable.getMessage());
+                                                }
+                                            });
+                                }
 
+                            }, new Action1<Throwable>() {
+                                @Override
+                                public void call(Throwable throwable) {
+                                    showSnackBar(throwable.getMessage());
+                                }
+                            });
+                }
 
-
-                                                return bitmap;
-
-                                            }
-                                        })
-                                        .observeOn(AndroidSchedulers.mainThread())
-                                        .subscribe(new Action1<Bitmap>() {
-                                            @Override
-                                            public void call(Bitmap bitmap) {
-                                                Drawable draw=new BitmapDrawable(bitmap);
-                                                Net.getNet().setHeadImage(draw);
-                                                viewPagerAdapter.flush();
-                                            }
-                                        }, new Action1<Throwable>() {
-                                            @Override
-                                            public void call(Throwable throwable) {
-                                                showSnackBar(throwable.getMessage());
-                                                Log.e("error",throwable.getMessage());
-                                            }
-                                        });
-                            }
-
-                        }, new Action1<Throwable>() {
-                            @Override
-                            public void call(Throwable throwable) {
-                                showSnackBar(throwable.getMessage());
-                            }
-                        });
                 break;
             default:
                 break;
         }
+        super.onActivityResult(requestCode,resultCode,data);
 
     }
     protected String  getPath(Uri selectedImage) {
@@ -362,4 +357,5 @@ public class Main extends AppCompatActivity {
         super.onDestroy();
         LocationUtils.getInstance(this).removeLocationUpdatesListener();
     }
+
 }

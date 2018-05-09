@@ -43,7 +43,7 @@ public interface NetApi {
     String pubaccount="api/account/";
     String mission="api/mission/";
     String apiorder="api/order/";
-    String apimessage="api/message";
+    String apimessage="api/message/";
 
 //    请求验证码
     @Headers({"Content-Type: text/html","Accept: application/json"})
@@ -58,7 +58,15 @@ public interface NetApi {
     @POST(pubaccount+"login")
     @FormUrlEncoded
     Observable<Output<UserInfoOutput>> login(@Field("username") String username,@Field("password") String password);
+//    验证码登录
+    @POST(pubaccount+"loginWithSmsCode")
+    @FormUrlEncoded
+    Observable<Output<UserInfoOutput>> loginWithSmsCode(@Field("phone")String phone,@Field("smsCode")String code);
 
+//    修改密码
+    @POST(pubaccount+"updatePassword")
+    @FormUrlEncoded
+    Observable<Output> updatePassword(@Field("password")String password);
 //    获取头像
     @GET(pubaccount+"getUserAvatar")
     Observable<ResponseBody> getUserAvatar(@Query("id")String id);
@@ -83,7 +91,8 @@ public interface NetApi {
 //    我发布的任务列表
     @GET(mission+"myList")
     Observable<Output<List<Mission>>> myList(@Query("page")Integer page);
-
+    @GET(mission+"image")
+    Observable<ResponseBody> image(@Query("id")String id);
 
 //    结束发布的任务
     @POST(mission+"finish")
@@ -108,7 +117,7 @@ public interface NetApi {
 //    充值
     @POST(apiorder+"charge")
     @FormUrlEncoded
-    Observable<Output> charge(@Field("amount")int amount,@Field("channel")String channer);
+    Observable<ResponseBody> charge(@Field("amount")int amount,@Field("channel")String channer);
 
 //    提现转账
     @POST(apiorder+"transfer")

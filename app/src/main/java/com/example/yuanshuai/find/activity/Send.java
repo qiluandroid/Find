@@ -87,6 +87,8 @@ public class Send extends AppCompatActivity {
             public void call(Void aVoid) {
                 if(check()){
                     Location location=LocationUtils.getInstance(Send.this).showLocation();
+                    double  a=location.getLatitude();
+                    double b=location.getLongitude();
                     Net.getNet().addMission(location.getLatitude(),location.getLongitude(),address.getText().toString(),title.getText().toString(),content.getText().toString(),1,imageAdapter.getPaths())
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())

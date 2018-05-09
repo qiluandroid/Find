@@ -1,10 +1,18 @@
 package com.example.yuanshuai.find.net;
 
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.net.Uri;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.model.GlideUrl;
+import com.bumptech.glide.load.model.LazyHeaders;
+import com.example.yuanshuai.find.R;
 import com.example.yuanshuai.find.activity.Send;
 import com.example.yuanshuai.find.model.Message;
 import com.example.yuanshuai.find.model.Mission;
@@ -16,9 +24,18 @@ import com.example.yuanshuai.find.model.UserData;
 import com.example.yuanshuai.find.model.UserInfoOutput;
 import com.example.yuanshuai.find.model.request.SendSmsInput;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.lang.reflect.Type;
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,19 +69,31 @@ public class Net {
     private Retrofit retrofit;
     private OkHttpClient.Builder okHttpClient;
     private NetApi ret;
+    private Mission mission;
+    private String cookie;
     public static synchronized Net getNet(){
         if(net==null)
             net=new Net();
         return net;
     }
     private Net(){
+        GsonBuilder builder = new GsonBuilder();
+
+        // Register an adapter to manage the date types as long values
+        builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+            public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                return new Date(json.getAsJsonPrimitive().getAsLong());
+            }
+        });
+
+        Gson gson = builder.create();
         okHttpClient=new OkHttpClient.Builder();
         okHttpClient.cookieJar(new CookieJar() {
             private final HashMap<String, List<Cookie>> cookieStore = new HashMap<String, List<Cookie>>();
             @Override
             public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
                 cookieStore.put(url.host(), cookies);
-                Log.e("a",""+cookies.get(0).toString());
+                cookie=cookies.get(0).toString();
             }
 
             @Override
@@ -74,14 +103,14 @@ public class Net {
             }
         });
 
-
         retrofit=new Retrofit.Builder()
                 .baseUrl(url)
                 .client(okHttpClient.build())
-                .addConverterFactory(GsonConverterFactory.create(new Gson()))
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
         ret=retrofit.create(NetApi.class);
+
     }
 
 //    请求验证码
@@ -96,9 +125,21 @@ public class Net {
     public Observable<Output<UserInfoOutput>> login(String name,String password){
         return  ret.login(name,password);
     }
+//    验证码登录
+    public Observable<Output> updatePassword(String password){
+        return ret.updatePassword(password);
+    }
+//    验证码登录
+    public Observable<Output<UserInfoOutput>> loginWithSmsCode(String number,String code){
+        return ret.loginWithSmsCode(number,code);
+    }
 //    获取头像
     public Observable<ResponseBody> getUserAvatar(){
         return ret.getUserAvatar(userInfoOutput.getId());
+    }
+//    根据id获取头像
+    public Observable<ResponseBody> getAvatar(String id){
+        return ret.getUserAvatar(id);
     }
 //    设置头像
     public Observable<Output> setUserAvatar(String path){
@@ -148,6 +189,8 @@ public class Net {
     public Observable<Output> finish(String id){
         return ret.finish(id);
     }
+//    获取图像
+    public Observable<ResponseBody> image(String id){return ret.image(id);}
 //    评论任务
     public Observable<Output> addComment(String id,String comment){
         return ret.addComment(id,comment);
@@ -161,7 +204,7 @@ public class Net {
         return ret.payComment(id,amount);
     }
 //    充值
-    public Observable<Output> charge(int amount,String channer){
+    public Observable<ResponseBody> charge(int amount,String channer){
         return ret.charge(amount,channer);
     }
 //    提现转账
@@ -190,6 +233,20 @@ public class Net {
     }
 
 
+//    加载图片
+    public void loadPic(Context context, String path, ImageView view){
+        GlideUrl glideUrl=new GlideUrl(path,new LazyHeaders.Builder().addHeader("Cookie",cookie).build());
+        Glide.with(context).load(cookie).into(view);
+    }
+
+//时间转换
+    public String  getTime(String ts){
+        SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Long time=new Long(ts);
+        String d = format.format(time);
+        return d;
+
+    }
 
     public byte[] getBs() {
         return bs;
@@ -233,5 +290,21 @@ public class Net {
 
     public String getName() {
         return name;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setMission(Mission mission) {
+        this.mission = mission;
+    }
+
+    public Mission getMission() {
+        return mission;
+    }
+
+    public String getCookie() {
+        return cookie;
     }
 }

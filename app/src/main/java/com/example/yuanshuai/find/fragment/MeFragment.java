@@ -105,11 +105,12 @@ public class MeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_me, container, false);
+        LinearLayout resetPassword=ButterKnife.findById(view,R.id.resetPassword);
         LinearLayout linearLayout= ButterKnife.findById(view,R.id.hasfabu);
-        LinearLayout linearLayout1=ButterKnife.findById(view,R.id.collection);
+//        LinearLayout linearLayout1=ButterKnife.findById(view,R.id.collection);
         LinearLayout linearLayout2=ButterKnife.findById(view,R.id.pay);
         LinearLayout linearLayout3=ButterKnife.findById(view,R.id.shouru);
-        LinearLayout linearLayout4=ButterKnife.findById(view,R.id.zan);
+//        LinearLayout linearLayout4=ButterKnife.findById(view,R.id.zan);
         LinearLayout linearLayout5=ButterKnife.findById(view,R.id.help);
         circleImageView=ButterKnife.findById(view,R.id.headImage);
         textView=ButterKnife.findById(view,R.id.name);
@@ -199,13 +200,13 @@ public class MeFragment extends Fragment {
                 startActivity(intent);
             }
         });
-        RxView.clicks(linearLayout1).throttleFirst(500, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
-            @Override
-            public void call(Void aVoid) {
-                Intent intent=new Intent(getActivity(), Collection.class);
-                startActivity(intent);
-            }
-        });
+//        RxView.clicks(linearLayout1).throttleFirst(500, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
+//            @Override
+//            public void call(Void aVoid) {
+//                Intent intent=new Intent(getActivity(), Collection.class);
+//                startActivity(intent);
+//            }
+//        });
         RxView.clicks(linearLayout2).throttleFirst(500, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
@@ -220,11 +221,57 @@ public class MeFragment extends Fragment {
                 startActivity(intent);
             }
         });
-        RxView.clicks(linearLayout4).throttleFirst(500, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
+//        RxView.clicks(linearLayout4).throttleFirst(500, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
+//            @Override
+//            public void call(Void aVoid) {
+//                Intent intent=new Intent(getActivity(), MyZan.class);
+//                startActivity(intent);
+//            }
+//        });
+        RxView.clicks(resetPassword).throttleFirst(500, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                Intent intent=new Intent(getActivity(), MyZan.class);
-                startActivity(intent);
+                AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
+                View view=LayoutInflater.from(getActivity()).inflate(R.layout.password,null);
+                final EditText pass=ButterKnife.findById(view,R.id.pass);
+                Button yes=ButterKnife.findById(view,R.id.yes);
+                Button cancel=ButterKnife.findById(view,R.id.cancel);
+                builder.setView(view);
+                final AlertDialog alertDialog=builder.create();
+                RxView.clicks(yes).throttleFirst(500, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        Log.e("db","yes");
+                        if((!("").equals(pass.getText().toString()))&&pass.getText().toString().length()>=6){
+                            Net.getNet().updatePassword(pass.getText().toString())
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(new Action1<Output>() {
+                                        @Override
+                                        public void call(Output output) {
+                                            Log.e("db", "o" + output.getCode());
+                                            if (output.getCode() == 0) {
+                                                Toast.makeText(getActivity(), "成功", Toast.LENGTH_SHORT).show();
+                                                alertDialog.dismiss();
+                                            }
+                                            Toast.makeText(getActivity(), "失败", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }, new Action1<Throwable>() {
+                                        @Override
+                                        public void call(Throwable throwable) {
+                                            Toast.makeText(getActivity(), ""+throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        }
+                    }
+                });
+                RxView.clicks(cancel).throttleFirst(500, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        alertDialog.dismiss();
+                    }
+                });
+                alertDialog.show();
             }
         });
 

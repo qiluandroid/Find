@@ -121,13 +121,14 @@ public class IndexFragment extends Fragment {
         type.setAdapter(typeAdapter);
         finds=new ArrayList<HashMap<String, Object>>();
         Location location=LocationUtils.getInstance(getActivity()).showLocation();
-        Net.getNet().nearbyList(0,location.getLatitude(),location.getLongitude(),5)
+        Net.getNet().nearbyList(0,location.getLatitude(),location.getLongitude(),10)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Output>() {
-                    @Override
-                    public void call(Output output) {
+                .subscribe(new Action1<Output<List<Mission>>>() {
+                        @Override
+                        public void call(Output<List<Mission>> output) {
                         Log.e("db",""+output);
+                        findAadapter.add(output.getData());
                     }
                 }, new Action1<Throwable>() {
                     @Override
@@ -159,10 +160,12 @@ public class IndexFragment extends Fragment {
         finds.add(map);
         finds.add(map2);
         finds.add(map3);
+        List<Mission> finds=new ArrayList<>();
         findAadapter=new FindAadapter(getContext(),finds);
         findAadapter.setOnItemClickListener(new TypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+                Net.getNet().setMission(findAadapter.getList().get(position));
                 Intent intent=new Intent(getActivity(),Detail.class);
                 startActivity(intent);
             }
@@ -180,7 +183,7 @@ public class IndexFragment extends Fragment {
     //    刷新列表
     public void flush(){
         Location location=LocationUtils.getInstance(getActivity()).showLocation();
-        Net.getNet().nearbyList(0,location.getLatitude(),location.getLongitude(),10)
+        Net.getNet().nearbyList(0,location.getLatitude(),location.getLongitude(),100)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<Output<List<Mission>>>() {
@@ -188,6 +191,7 @@ public class IndexFragment extends Fragment {
                     public void call(Output<List<Mission>> listOutput) {
                         Log.e("f",""+listOutput.getData().size());
 //                        放到recycleview上
+                        findAadapter.add(listOutput.getData());
                     }
                 }, new Action1<Throwable>() {
                     @Override

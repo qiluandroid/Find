@@ -40,6 +40,13 @@ dependencies {
     compile 'com.android.support:support-v4:25.3.1'
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.pingxx:pingpp-core:2.1.16'
+    compile 'com.pingxx:pingpp-ui:2.1.16'
+    compile 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
+    compile 'com.pingxx:pingpp-alipay:2.1.16'
+    compile 'com.pingxx:pingpp-upacp:2.1.16'
+    compile 'com.pingxx:pingpp-qpay:2.1.16'
+    compile 'com.pingxx:pingpp-cmbwallet:2.1.16'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.0'
 }

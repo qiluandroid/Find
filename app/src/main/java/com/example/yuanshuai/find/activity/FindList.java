@@ -54,6 +54,7 @@ public class FindList extends AppCompatActivity {
         list.add(map);
         list.add(map);
         list.add(map);
+        final List<Mission> list=new ArrayList<>();
         findAadapter=new FindAadapter(this,list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
         recyclerView.setAdapter(findAadapter);
@@ -64,6 +65,7 @@ public class FindList extends AppCompatActivity {
                     @Override
                     public void call(Output<List<Mission>> listOutput) {
                         Log.e("my",""+listOutput.getCode());
+                        findAadapter.add(listOutput.getData());
                     }
                 }, new Action1<Throwable>() {
                     @Override
